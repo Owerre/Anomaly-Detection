@@ -1,6 +1,6 @@
 # Anomaly Detection of Network Intrusion
 
-## Data Infomation
+## Data Information
 
  The dataset can be downloaded from  [Harvard Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/OPQMVF)
 
