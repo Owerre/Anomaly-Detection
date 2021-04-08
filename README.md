@@ -1,35 +1,28 @@
-# Anomaly Detection of CreditCard Fraud & Network Intrusion
+# Anomaly Detection of Network Intrusion
 
-Anomaly detection falls into two main categories:
+## Data Info
 
-## 1. Outlier Detection:
-  In outlier detection, the training data contains outliers which are defined as observations that are far from the others. The objective is to detect the outliers in a new observation.
+ The dataset can be downloaded from  [Harvard Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/OPQMVF)
 
-## 2. Novelty Detection:
- In	novelty detection, a semi-supervised learning technique, the training data is not polluted by outliers. It is trained to learn the high and low density regions in the feature space, and we are interested in detecting whether a new observation is an outlier.
+## Dimesionality Reduction
 
-## Exploratory Data Analysis
-We show the result of the PCA dimensionality reductions of the two datasets.
+PCA dimensionality reductions of the dataset
 
-![PCA Plot1](creditcard/image/pca.png)
+![fig1](image/pca.png)
 
-![PCA Plot2](network_intrusion/image/pca.png)
+## Unsupervised Learning
 
-## Methods
-To study the anomaly detection of credit card fraud & network intrusion, we trained and evaluated the following unsupervised learning techniques
+In the unsupervised setting, the class labels of the training set are not available.  In the current problem, the true labels were ignored during training in order to reflect a real-world scenario. Hence, the unsupervised classification models were used to predict the true labels for each record. We trained Isolation Forest, Cluster-Based Local Outlier Factor (CBLOF), Principal Component Analysis (PCA) and Elliptic Envelope. In real-world unsupervised problems, the business have to validate the predicted results due to absence of ground truth. However, in this problem the predicted labels were validated with the true labels and the results below show that the unsupervised models predicted so many fasle positives.
 
-1). Local Outlier Factor
+![fig2](image/unsup.png)
 
-2). One-Class SVM
+## Semi-Supervised Learning
+In the semi-supervised setting, a large unlabeled dataset and a small labeled dataset are given. The goal is to train a classifier on the entire dataset that would predict the labels of the unlabeled data points. In the present problem, we created 84\%  unlabeled data and 16\% labeled data points. Using self-training semi-supervised learning method, we trained Logistic Regression and Random Forest as base classifiers. We use the ground truth (true lables) of the unlabeled dataset to validate the performance of the models, but in reality the ground truth of the unlabeled data points will not be provided. The results are shown below
 
-3). Isolation Forest
+![fig3](image/ss.png)
 
-4). Elliptic Envelope
+## Supervised Learning
 
-Furthermore, we also trained the imbalanced datasets using supervised learning methods such as
+In the supervised setting, we trained Logistic Regression and Random Forest on the enitre labeled dataset. The results are shown below
 
-a). Logistic Regression Classifier
-
-b). Random Forest Classifier
-
-c). XGBoost Classifier
+![fig4](image/sup.png)
