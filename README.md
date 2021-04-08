@@ -4,12 +4,6 @@
 
  The dataset can be downloaded from  [Harvard Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/OPQMVF)
 
-## Dimesionality Reduction
-
-PCA dimensionality reductions of the dataset
-
-![fig1](Network-intrusion/image/pca.png)
-
 ## Unsupervised Learning
 
 In the unsupervised setting, the class labels of the training set are not available.  In the current problem, the true labels were ignored during training in order to reflect a real-world scenario. Hence, the unsupervised classification models were used to predict the true labels for each record. We trained Isolation Forest, Cluster-Based Local Outlier Factor (CBLOF), Principal Component Analysis (PCA) and Elliptic Envelope. In real-world unsupervised problems, the business have to validate the predicted results due to absence of ground truth. However, in this problem the predicted labels were validated with the true labels and the results below show that the unsupervised models predicted so many fasle positives.
