@@ -11,7 +11,7 @@ In the unsupervised setting, the class labels of the training set are not availa
 ![fig2](Network-intrusion/image/unsup.png)
 
 ## Semi-Supervised Learning
-In the semi-supervised setting, a large unlabeled dataset and a small labeled dataset are given. The goal is to train a classifier on the entire dataset that would predict the labels of the unlabeled data points. In the present problem, we created 84\%  unlabeled data and 16\% labeled data points. Using self-training semi-supervised learning method, we trained Logistic Regression and Random Forest as base classifiers. We use the ground truth (true lables) of the unlabeled dataset to validate the performance of the models, but in reality the ground truth of the unlabeled data points will not be provided. The results are shown below
+In the semi-supervised setting, a large unlabeled dataset and a small labeled dataset are given. The goal is to train a classifier on the entire dataset that would predict the labels of the unlabeled data points. In the present problem, we created 92\%  unlabeled data and 8\% labeled data points. Using self-training semi-supervised learning method, we trained Logistic Regression and Random Forest as base classifiers. We use the ground truth (true lables) of the unlabeled dataset to validate the performance of the models, but in reality the ground truth of the unlabeled data points will not be provided. The results are shown below
 
 ![fig3](Network-intrusion/image/ss.png)
 
