@@ -11,11 +11,10 @@ from sklearn.semi_supervised import SelfTrainingClassifier
 from sklearn.semi_supervised import LabelSpreading
 
 # Model performance metrics
-from sklearn.model_selection import cross_val_score, cross_val_predict
 from sklearn.metrics import confusion_matrix, classification_report
-from sklearn.metrics import accuracy_score, auc, recall_score
-from sklearn.metrics import roc_curve, roc_auc_score
-from sklearn.metrics import average_precision_score, precision_recall_curve
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import average_precision_score
 
 class SemiSupervised:
     """
@@ -26,8 +25,8 @@ class SemiSupervised:
         Parameter initialization
         """
         
-    def self_training_clf(self, base_classifier, X_train, y_train, threshold= None, max_iter = None,
-                             verbose = None):
+    def self_training_clf(self, base_classifier, X_train, y_train, 
+                            threshold= None, max_iter = None,verbose = None):
         """
         Train self-training classifier from scikit-learn >= 0.24.1
 
@@ -86,7 +85,7 @@ class SemiSupervised:
         predicted_proba = model.predict_proba(X_train)
         return predicted_labels, predicted_proba
 
-    def eval_metrics(self, y_true, y_pred):
+    def eval_metrics(self, y_true, y_pred, model_nm = None):
         """
          Evaluation metric using the ground truth and the predicted labels
 
@@ -94,19 +93,21 @@ class SemiSupervised:
         ___________
         y_pred: predicted labels
         y_true: true labels
+        model_nm: name of classifier
 
         Returns
         _____________
         Performance metrics
         """
-        print('-' * 75)
-        print('Test accuracy:  %f' % (accuracy_score(y_true, y_pred)))
+        print('Test predictions for {}'.format(str(model_nm)))
+        print('-'* 60)
+        print('Accuracy:  %f' % (accuracy_score(y_true, y_pred)))
         print('AUROC: %f' % (roc_auc_score(y_true, y_pred)))
         print('AUPRC: %f' % (average_precision_score(y_true, y_pred)))
         print('Predicted classes:', np.unique(y_pred))
         print('Confusion matrix:\n', confusion_matrix(y_true, y_pred))
         print('Classification report:\n', classification_report(y_true, y_pred))
-        print('-' * 75)
+        print('-' * 60)
 
     def plot_varying_threshold(self, base_classifier, X_train, y_train):
         """
