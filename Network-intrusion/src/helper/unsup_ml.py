@@ -170,7 +170,7 @@ class UnsupervisedModels:
         pca_anomaly_scores = self.min_max_scaler(pca_anomaly_scores)
         return pca_anomaly_scores, labels
 
-    def eval_metric(self, y_true, y_pred):
+    def eval_metric(self, y_true, y_pred, model_nm = None):
         """
          Evaluation metric using the ground truth and the predicted labels
 
@@ -178,19 +178,21 @@ class UnsupervisedModels:
         ___________
         y_pred: predicted labels
         y_true: true labels
+        model_nm: name of model
 
         Returns
         _____________
         Performance metrics
         """
-        print('-' * 75)
-        print('Test accuracy:  %f' % (accuracy_score(y_true, y_pred)))
+        print('Test predictions for {}'.format(str(model_nm)))
+        print('-' * 60)
+        print('Accuracy:  %f' % (accuracy_score(y_true, y_pred)))
         print('AUROC: %f' % (roc_auc_score(y_true, y_pred)))
         print('AUPRC: %f' % (average_precision_score(y_true, y_pred)))
         print('Predicted classes:', np.unique(y_pred))
         print('Confusion matrix:\n', confusion_matrix(y_true, y_pred))
         print('Classification report:\n', classification_report(y_true, y_pred))
-        print('-' * 75)
+        print('-' * 60)
 
     def min_max_scaler(self, arr):
         """
