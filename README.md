@@ -20,7 +20,7 @@ In the real-world unsupervised problems, the business have to validate the predi
 
 ## Semi-Supervised Learning
 
-In the semi-supervised setting, a large unlabeled dataset and a small labeled dataset are given. The goal is to train a classifier on the entire dataset that would predict the labels of the unlabeled data points in the training set. This is called transductive semi-supervised learning. In the present problem, we have created a semi-supervised learning dataset consisting of $92\%$  unlabeled data points and $8\%$ labeled data points.
+In the semi-supervised setting, a large unlabeled dataset and a small labeled dataset are given. The goal is to train a classifier on the entire dataset that would predict the labels of the unlabeled data points in the training set. This is called transductive semi-supervised learning. In the present problem, we have created a semi-supervised learning dataset consisting of 92\%  unlabeled data points and 8\% labeled data points.
 
 Using self-training semi-supervised learning method, we trained two base classifiers:
 
@@ -33,13 +33,11 @@ We use the ground truth (true lables) of the unlabeled dataset to validate the p
 
 ## Supervised Learning
 
-
-
 In the supervised setting, the class label for each record in the training set are provided and the goal is to train a classifier that would be used for the prediction on unseen data. Here, we have trained two classifiers
 
 1. Logistic Regression
 2. Random Forest
 
-The results are below show that the two classifiers perform extremely well on the dataset. The AUC-ROC and AUC-PRC are $100\%$ for on the training (cross-validation) and test sets
+The results are below show that the two classifiers perform extremely well on the dataset. The AUC-ROC and AUC-PRC are 100\% for on the training (cross-validation) and test sets
 
 ![fig4](Network-intrusion/image/sup.png)
