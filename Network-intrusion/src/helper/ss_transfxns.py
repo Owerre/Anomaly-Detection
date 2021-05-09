@@ -157,7 +157,7 @@ class TransformationPipeline:
         plt.rcParams.update({'font.size': 15})
         fig, (ax1,ax2) = plt.subplots(1,2, figsize = (20,6))
 
-        self.pca_plot_labeled(X_train, y_train, palette = ['gray', 'lime', 'r'], ax = ax1)
+        self.pca_plot_labeled(X_train, y_train, palette = ['lime', 'r', 'gray'], ax = ax1)
         self.pca_plot_labeled(X_train, y_pred, palette = ['lime', 'r'], ax = ax2)
         ax1.set_title("PCA before semi-supervised classification")
         ax2.set_title("PCA after semi-supervised classification")
