@@ -23,7 +23,7 @@ current problem, the true labels were ignored during training in order to reflec
 
 - Elliptic Envelope.
 
-In the real-world unsupervised problems, the business have to validate the predicted results due to absence of ground truth. However, in the present problem the predicted labels were validated with the true labels and the results below show that the unsupervised models predicted so many false positives.
+In the real-world unsupervised problems, the business has to validate the predicted results due to absence of ground truth. In the present problem, however, the predicted labels were validated with the true labels, and the results below show that the unsupervised models predicted so many false positives.
 
 ![fig](Network-intrusion/image/unsup.png)
 
@@ -31,7 +31,7 @@ In the real-world unsupervised problems, the business have to validate the predi
 
 In the semi-supervised setting, a large unlabeled dataset and a small labeled dataset are given. The goal is to train a classifier on the entire dataset that would predict the labels of the unlabeled data points in the training set. This is called transductive semi-supervised learning. In the present problem, we have created a semi-supervised learning dataset consisting of 92\%  unlabeled data points and 8\% labeled data points.
 
-Using self-training semi-supervised learning method, we trained two base classifiers:
+Using self-training semi-supervised learning method, we've trained two base classifiers:
 
 - Logistic Regression
 
