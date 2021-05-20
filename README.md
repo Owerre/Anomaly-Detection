@@ -53,4 +53,4 @@ In the supervised setting, the class label for each record in the training set a
 
 The results below show that the two classifiers perform extremely well on the dataset. The AUC-ROC and AUC-PRC are 100\% for on the training (cross-validation) and test sets.
 
-![fig](Network-intrusion/image/sup.png)
+![fig](Network-intrusion/image/supv.png)
