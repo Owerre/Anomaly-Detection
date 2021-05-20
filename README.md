@@ -21,7 +21,7 @@ current problem, the true labels were ignored during training in order to reflec
 
 - Elliptic Envelope.
 
-In the real-world unsupervised problems, the business have to validate the predicted results due to absence of ground truth. However, in the present problem the predicted labels were validated with the true labels and the results below show that the unsupervised models predicted so many fasle positives.
+In the real-world unsupervised problems, the business have to validate the predicted results due to absence of ground truth. However, in the present problem the predicted labels were validated with the true labels and the results below show that the unsupervised models predicted so many false positives.
 
 ![fig](Network-intrusion/image/unsup.png)
 
@@ -33,7 +33,7 @@ Using self-training semi-supervised learning method, we trained two base classif
 
 - Logistic Regression
 
-- Random Forest
+- Random Forest classifier
 
 We use the ground truth (true lables) of the unlabeled dataset to validate the performance of the self-training semi-supervised learning models, but in reality the ground truth of the unlabeled data points will not be provided. The results are shown below
 
@@ -41,12 +41,12 @@ We use the ground truth (true lables) of the unlabeled dataset to validate the p
 
 ## Supervised Learning
 
-In the supervised setting, the class label for each record in the training set are provided and the goal is to train a classifier that would be used for the prediction on unseen data. Here, we have trained two classifiers
+In the supervised setting, the class label for each record in the training set are provided and the goal is to train a classifier that would be used for prediction on unseen data. Here, we have trained two classifiers
 
 - Logistic Regression
 
-- Random Forest
+- Random Forest classifier
 
-The results are below show that the two classifiers perform extremely well on the dataset. The AUC-ROC and AUC-PRC are 100\% for on the training (cross-validation) and test sets
+The results below show that the two classifiers perform extremely well on the dataset. The AUC-ROC and AUC-PRC are 100\% for on the training (cross-validation) and test sets.
 
 ![fig](Network-intrusion/image/sup.png)
