@@ -1,8 +1,10 @@
-# Anomaly Detection of Network Intrusion
+# Anomaly Detection in Network Intrusion
+
+The goal of this project is to present different machine learning methods for anomaly detection. We have constructed three different datasets that were used to demonstrate unsupervised, semi-supervised, and supervised learning methods. 
 
 ## Data Information
 
-The dataset can be found in  [dataverse.harvard.edu](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/OPQMVF)
+The dataset can be downloaded from  [dataverse.harvard.edu](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/OPQMVF)
 
 ## Dimensionality Reduction
 
