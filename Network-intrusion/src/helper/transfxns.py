@@ -15,14 +15,12 @@ BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_PATH)
 
 # Data pre-processing
-from sklearn_pandas import DataFrameMapper
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import LabelBinarizer
+from sklearn.preprocessing import PowerTransformer
 from sklearn.preprocessing import StandardScaler
-from sklearn.base import TransformerMixin
 
 # import custom class
 from helper import log_transfxn as cf 
@@ -55,7 +53,7 @@ class TransformationPipeline:
         Transformation pipeline and transformed data in array
         """
         # Create pipeline
-        num_pipeline = Pipeline([ 
+        num_pipeline = Pipeline([('p_transf', PowerTransformer(standardize=False)),
                                 ('std_scaler', StandardScaler()),
                                 ])
 
@@ -83,7 +81,7 @@ class TransformationPipeline:
         Transformation pipeline and transformed data in array
         """
         # Instatiate class
-        one_hot_encoder = OneHotEncoder()
+        one_hot_encoder = OneHotEncoder(handle_unknown='ignore')
 
         # Fit transform the training set
         X_train_scaled = one_hot_encoder.fit_transform(X_train)

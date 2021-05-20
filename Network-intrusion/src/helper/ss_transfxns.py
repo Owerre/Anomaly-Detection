@@ -10,6 +10,7 @@ import seaborn as sns
 
 # Data pre-processing
 from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import PowerTransformer
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
@@ -51,7 +52,7 @@ class TransformationPipeline:
         feat_names = list(X_train.select_dtypes('number'))
 
         # Create pipeline
-        num_pipeline = Pipeline([ 
+        num_pipeline = Pipeline([('p_transf', PowerTransformer(standardize=False)),
                                  ('std_scaler', StandardScaler()),
                                 ])
 
