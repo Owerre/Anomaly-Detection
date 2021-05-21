@@ -114,7 +114,7 @@ class TransformationPipeline:
         Parameters
         __________
         data: transformed and scaled data
-        labels: labels of the data
+        labels: class labels
         palette: color list
         ax : matplotlib axes
 

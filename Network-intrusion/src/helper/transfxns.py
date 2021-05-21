@@ -19,7 +19,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import PowerTransformer
 from sklearn.preprocessing import StandardScaler
 
 # import custom class
@@ -53,7 +52,7 @@ class TransformationPipeline:
         Transformation pipeline and transformed data in array
         """
         # Create pipeline
-        num_pipeline = Pipeline([('p_transf', PowerTransformer(standardize=False)),
+        num_pipeline = Pipeline([
                                 ('std_scaler', StandardScaler()),
                                 ])
 
@@ -160,38 +159,5 @@ class TransformationPipeline:
         plt.ylabel("Principal component 2")
         plt.title("Dimensionality reduction")
         plt.legend(loc = 'best')
-        # plt.savefig('../image/pca.png')
-        plt.show()
-
-    def pca_plot_unlabeled(self, data_, palette = None):
-        """
-        Dimensionality reduction of unlabeled data using PCA 
-
-        Parameters
-        __________
-        data: scaled data
-        palette: color list
-
-        Returns
-        __________
-        Matplotlib plot of two component PCA
-        """
-        #PCA
-        pca = PCA(n_components = 2)
-        X_pca = pca.fit_transform(data_)
-
-        # put in dataframe
-        X_reduced_pca = pd.DataFrame(data = X_pca)
-        X_reduced_pca.columns = ['PC1', 'PC2']
-
-        # plot results
-        plt.rcParams.update({'font.size': 15})
-        plt.subplots(figsize = (8,6))
-        sns.scatterplot(x = 'PC1', y = 'PC2', data = X_reduced_pca, palette = palette)
-
-        # axis labels
-        plt.xlabel("Principal component 1")
-        plt.ylabel("Principal component 2")
-        plt.title("Dimensionality reduction")
-        # plt.savefig('../image/unlbled.png')
+        plt.savefig('../image/pca.png')
         plt.show()
