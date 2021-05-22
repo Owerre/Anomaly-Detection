@@ -39,7 +39,7 @@ Using self-training semi-supervised learning method, we've trained the following
 
 - XGBoost
 
-We use the ground truth (true lables) of the unlabeled dataset to validate the performance of the self-training semi-supervised learning models, but in reality the ground truth of the unlabeled data points will not be provided. The results are shown below
+We use the ground truth (true labels) of the unlabeled dataset to validate the performance of the self-training semi-supervised learning models, but in reality the ground truth of the unlabeled data points will not be provided. The results are shown below
 
 ![fig](Network-intrusion/image/ss.png)
 

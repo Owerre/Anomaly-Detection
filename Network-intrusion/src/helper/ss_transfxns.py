@@ -24,7 +24,6 @@ from helper import log_transfxn as cf
 
 # Dimensionality reduction
 from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
 
 class TransformationPipeline:
     """
@@ -131,8 +130,8 @@ class TransformationPipeline:
         X_reduced_pca['class'] = labels
 
         # plot results
-        sns.scatterplot(x = 'PC1', y = 'PC2', data = X_reduced_pca, hue = 'class', style = 'class',
-         palette = palette, ax = ax)
+        sns.scatterplot(x = 'PC1', y = 'PC2', data = X_reduced_pca, hue = 'class', 
+                        style = 'class',palette = palette, ax = ax)
 
         # axis labels
         ax.set_xlabel("Principal component 1")

@@ -139,7 +139,7 @@ class TransformationPipeline:
         __________
         Matplotlib plot of two component PCA
         """
-        #PCA
+        # PCA
         pca = PCA(n_components = 2)
         X_pca = pca.fit_transform(data_)
 

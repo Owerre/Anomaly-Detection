@@ -148,11 +148,11 @@ class TransformationPipeline:
         X_reduced_pca.columns = ['PC1', 'PC2']
         X_reduced_pca['class'] = label
      
-          # Plot figure
+        # plot figure
         plt.rcParams.update({'font.size': 15})
         fig, (ax1,ax2) = plt.subplots(1,2, figsize = (20,6))
-        sns.scatterplot(x = 'PC1', y = 'PC2', data = X_reduced_pca, palette = palette, ax = ax1)
         
+        sns.scatterplot(x = 'PC1', y = 'PC2', data = X_reduced_pca, palette = palette, ax = ax1)
         sns.scatterplot(x = 'PC1', y = 'PC2', data = X_reduced_pca, hue = 'class', palette = palette, ax = ax2)
 
         # axes labels
