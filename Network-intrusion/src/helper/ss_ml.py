@@ -1,56 +1,62 @@
 ####################################
 # Author: S. A. Owerre
 # Date modified: 12/03/2021
+# Class: Semi-Supervised Learning
 ####################################
 
 # Filter warnings
 import warnings
 warnings.filterwarnings("ignore")
-
-# Data manipulation and visualization
 import numpy as np
 import matplotlib.pyplot as plt
-
-# Semi-supervised models
 from sklearn.semi_supervised import SelfTrainingClassifier
 from sklearn.semi_supervised import LabelSpreading
-
-# Model performance metrics
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import average_precision_score
 
 class SemiSupervised:
-    """
-    Class for training semi-supervised classifiers
-    """
+    """Semi-supervised learning classifiers."""
+
     def __init__(self):
-        """
-        Parameter initialization
-        """
+        """Parameter initialization."""
         
-    def self_training_clf(self, base_classifier, X_train, y_train, 
-                            threshold= None, max_iter = None,verbose = None):
+    def self_training_clf(
+        self, 
+        base_classifier, 
+        X_train, 
+        y_train, 
+        threshold=None, 
+        max_iter=None,
+        verbose = None
+    ):
         """
         Train self-training classifier from scikit-learn >= 0.24.1
 
         Parameters
-        ___________
-        base_classifier: Supervised classifier implementing both fit and predict_proba
-        X_train: Scaled feature matrix of the training set
-        y_train: Class label of the training set
-        threshold (float):  The decision threshold for use with criterion='threshold'. Should be in [0, 1)
-        max_iter (int):  Maximum number of iterations allowed. Should be greater than or equal to 0
-        verbose (bool): Enable verbose output
+        ----------
+        base_classifier: supervised classifier implementing 
+        both fit and predict_proba
+        X_train: scaled feature matrix of the training set
+        y_train: class label of the training set
+        threshold (float):  the decision threshold for 
+        use with criterion='threshold'. Should be in [0, 1)
+        max_iter (int):  maximum number of iterations allowed. 
+        Should be greater than or equal to 0
+        verbose (bool): enable verbose output
 
         Returns
-        _____________
-        Predicted labels and probability
+        -------
+        predicted labels and probability
         """
         # Self training model
-        model = SelfTrainingClassifier(base_classifier,threshold= threshold, 
-                            max_iter = max_iter, verbose = verbose)
+        model = SelfTrainingClassifier(
+            base_classifier,
+            threshold=threshold, 
+            max_iter=max_iter, 
+            verbose = verbose
+            )
 
         # Fit the training set
         model.fit(X_train, y_train)
@@ -62,23 +68,28 @@ class SemiSupervised:
         predicted_proba = model.predict_proba(X_train)
         return predicted_labels, predicted_proba
       
-    def label_spread(self, X_train, y_train, gamma = None, max_iter = None):
+    def label_spread(self, X_train, y_train, gamma=None, max_iter=None):
         """
         Train Label Spreading model from scikit-learn
 
         Parameters
-        __________
-        X_train: Scaled training data
-        y_train: Class label
-        gamma: Parameter for rbf kernel
-        max_iter: Maximum number of iterations allowed
+        ----------
+        X_train: scaled training data
+        y_train: class label
+        gamma: parameter for rbf kernel
+        max_iter: maximum number of iterations allowed
 
         Returns
-        ________
+        -------
         Predicted labels and probability
         """
         # Label spreading model
-        model = LabelSpreading(kernel='rbf', gamma = gamma, max_iter = max_iter, n_jobs= -1)
+        model = LabelSpreading(
+            kernel='rbf', 
+            gamma=gamma, 
+            max_iter=max_iter,
+            n_jobs= -1
+        )
 
         # Fit the training set
         model.fit(X_train, y_train)
@@ -95,13 +106,13 @@ class SemiSupervised:
          Evaluation metric using the ground truth and the predicted labels
 
         Parameters
-        ___________
+        ----------
         y_pred: predicted labels
         y_true: true labels
         model_nm: name of classifier
 
         Returns
-        _____________
+        -------
         Performance metrics
         """
         print('Test predictions for {}'.format(str(model_nm)))
@@ -119,13 +130,14 @@ class SemiSupervised:
         Plot the effect of varying threshold for self-training
 
         Parameters
-        ___________
-        base_classifier: Supervised classifier implementing both fit and predict_proba
-        X_train: Scaled feature matrix of the training set
-        y_train: Class label of the training set
+        ----------
+        base_classifier: supervised classifier implementing 
+        both fit and predict_proba
+        X_train: scaled feature matrix of the training set
+        y_train: class label of the training set
 
         Returns
-        _____________
+        -------
         Matplotlib figure
         """
         total_samples  = y_train.shape[0]
@@ -133,23 +145,28 @@ class SemiSupervised:
         x_values = np.append(x_values, 0.99999)
         no_labeled = np.zeros(x_values.shape[0])
         no_iterations = np.zeros(x_values.shape[0])
-
         for (i, threshold) in enumerate(x_values):
-
-            # Fit model with chosen base classifier
-            self_training_clf = SelfTrainingClassifier(base_classifier,threshold=threshold)
+            # fit model with chosen base classifier
+            self_training_clf = SelfTrainingClassifier(
+                base_classifier,
+                threshold=threshold
+            )
             self_training_clf.fit(X_train, y_train)
 
-            # The number of labeled samples that the classifier has available by the end of fit
+            # the number of labeled samples that the classifier 
+            # has available by the end of fit
             no_labeled[i] = total_samples - \
-                np.unique(self_training_clf.labeled_iter_, return_counts=True)[1][0]
+                np.unique(
+                    self_training_clf.labeled_iter_, 
+                    return_counts=True
+                )[1][0]
 
-            # The last iteration the classifier labeled a sample in
+            # the last iteration the classifier labeled a sample in
             no_iterations[i] = np.max(self_training_clf.labeled_iter_)
 
-        # Plot figures
+        # plot figures
         plt.rcParams.update({'font.size': 15})
-        fig, (ax1, ax2) = plt.subplots(1,2, figsize = (15,4))
+        _, (ax1, ax2) = plt.subplots(1,2, figsize = (15,4))
 
         ax1.plot(x_values, no_labeled, color='b')
         ax1.set_xlabel('Threshold')
