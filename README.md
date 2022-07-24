@@ -8,7 +8,7 @@ The dataset can be downloaded from  [dataverse.harvard.edu](https://dataverse.ha
 
 ## Dimensionality Reduction
 
-![fig](Network-intrusion/image/pca.png)
+![fig](network-intrusion/image/pca.png)
 
 ## Unsupervised Learning
 
@@ -25,7 +25,7 @@ current problem, the true labels were ignored during training in order to reflec
 
 In the real-world unsupervised problems, the business has to validate the predicted results due to absence of ground truth. In the present problem, however, the predicted labels were validated with the true labels, and the results below show that the unsupervised models predicted so many false positives, but with perfect recall.
 
-![fig](Network-intrusion/image/unsup.png)
+![fig](network-intrusion/image/unsup.png)
 
 ## Semi-Supervised Learning
 
@@ -41,7 +41,7 @@ Using self-training semi-supervised learning method, we've trained the following
 
 We use the ground truth (true labels) of the unlabeled dataset to validate the performance of the self-training semi-supervised learning models, but in reality the ground truth of the unlabeled data points will not be provided. The results are shown below
 
-![fig](Network-intrusion/image/ss.png)
+![fig](network-intrusion/image/ss.png)
 
 ## Supervised Learning
 
@@ -53,4 +53,4 @@ In the supervised setting, the class label for each record in the training set a
 
 The results below show that the two classifiers perform extremely well on the dataset. The AUC-ROC and AUC-PRC are 100\% for on the training (cross-validation) and test sets.
 
-![fig](Network-intrusion/image/supv.png)
+![fig](network-intrusion/image/supv.png)
