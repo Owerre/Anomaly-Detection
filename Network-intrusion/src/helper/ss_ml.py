@@ -4,7 +4,6 @@
 # Class: Semi-Supervised Learning
 ####################################
 
-# Filter warnings
 import warnings
 warnings.filterwarnings("ignore")
 import numpy as np
@@ -29,10 +28,9 @@ class SemiSupervised:
         y_train, 
         threshold=None, 
         max_iter=None,
-        verbose = None
+        verbose=None
     ):
-        """
-        Train self-training classifier from scikit-learn >= 0.24.1
+        """Train self-training classifier from scikit-learn >= 0.24.1.
 
         Parameters
         ----------
@@ -50,27 +48,26 @@ class SemiSupervised:
         -------
         predicted labels and probability
         """
-        # Self training model
+        # self training model
         model = SelfTrainingClassifier(
             base_classifier,
             threshold=threshold, 
             max_iter=max_iter, 
             verbose = verbose
-            )
+        )
 
-        # Fit the training set
+        # fit the training set
         model.fit(X_train, y_train)
 
-        # Predict the labels of the unlabeled data points
+        # predict the labels of the unlabeled data points
         predicted_labels = model.predict(X_train)
 
-        # Predict probability
+        # predict probability
         predicted_proba = model.predict_proba(X_train)
         return predicted_labels, predicted_proba
       
     def label_spread(self, X_train, y_train, gamma=None, max_iter=None):
-        """
-        Train Label Spreading model from scikit-learn
+        """Train Label Spreading model from scikit-learn
 
         Parameters
         ----------
@@ -83,7 +80,7 @@ class SemiSupervised:
         -------
         Predicted labels and probability
         """
-        # Label spreading model
+        # label spreading model
         model = LabelSpreading(
             kernel='rbf', 
             gamma=gamma, 
@@ -91,19 +88,18 @@ class SemiSupervised:
             n_jobs= -1
         )
 
-        # Fit the training set
+        # fit the training set
         model.fit(X_train, y_train)
 
-        # Predict the labels of the unlabeled data points
+        # predict the labels of the unlabeled data points
         predicted_labels = model.transduction_
 
-        # Predict probability
+        # predict probability
         predicted_proba = model.predict_proba(X_train)
         return predicted_labels, predicted_proba
 
-    def eval_metrics(self, y_true, y_pred, model_nm = None):
-        """
-         Evaluation metric using the ground truth and the predicted labels
+    def eval_metrics(self, y_true, y_pred, model_nm=None):
+        """Evaluation metric using the ground truth and the predicted labels.
 
         Parameters
         ----------
@@ -126,8 +122,7 @@ class SemiSupervised:
         print('-' * 60)
 
     def plot_varying_threshold(self, base_classifier, X_train, y_train):
-        """
-        Plot the effect of varying threshold for self-training
+        """Plot the effect of varying threshold for self-training.
 
         Parameters
         ----------
@@ -159,15 +154,14 @@ class SemiSupervised:
                 np.unique(
                     self_training_clf.labeled_iter_, 
                     return_counts=True
-                )[1][0]
+            )[1][0]
 
             # the last iteration the classifier labeled a sample in
             no_iterations[i] = np.max(self_training_clf.labeled_iter_)
 
         # plot figures
         plt.rcParams.update({'font.size': 15})
-        _, (ax1, ax2) = plt.subplots(1,2, figsize = (15,4))
-
+        _, (ax1, ax2) = plt.subplots(1,2, figsize=(15,4))
         ax1.plot(x_values, no_labeled, color='b')
         ax1.set_xlabel('Threshold')
         ax1.set_ylabel('Number of labeled samples')

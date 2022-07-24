@@ -4,23 +4,22 @@
 # Class: Log Transformation
 ############################
 
-# Filter warnings
 import warnings
 warnings.filterwarnings("ignore")
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 
 class LogTransformer(BaseEstimator, TransformerMixin):
-    """A class to perform log(1+x) transformation on numerical features."""
+    """Performs log(1+x) transformation on numerical features."""
 
     def __init__(self):
         """Define parameters."""
 
-    def fit(self, X, y = None):
+    def fit(self, X, y=None):
         """Do nothing."""
         return self
 
-    def transform(self, X, y = None):
+    def transform(self, X, y=None):
         """Log transform numerical variables."""
         num_attribs = list(X.select_dtypes('number'))
         self.X_num = X[num_attribs]
