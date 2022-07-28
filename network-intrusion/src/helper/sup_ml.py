@@ -5,7 +5,8 @@
 ##############################
 
 import warnings
-warnings.filterwarnings("ignore")
+
+warnings.filterwarnings('ignore')
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,6 +18,7 @@ from sklearn.metrics import accuracy_score, auc
 from sklearn.metrics import roc_curve, roc_auc_score
 from sklearn.metrics import average_precision_score, precision_recall_curve
 
+
 class SupervisedModels:
     """Model training of supervised ML."""
 
@@ -24,13 +26,7 @@ class SupervisedModels:
         """Parameter initialization."""
 
     def eval_metrics_cv(
-        self, 
-        model, 
-        X_train, 
-        y_train, 
-        cv_fold, 
-        scoring=None, 
-        model_nm=None
+        self, model, X_train, y_train, cv_fold, scoring=None, model_nm=None
     ):
         """Cross-validation on the training set.
 
@@ -53,10 +49,7 @@ class SupervisedModels:
 
         # compute accuracy on k-fold cross validation
         score = cross_val_score(
-            model, 
-            X_train, 
-            y_train,cv=cv_fold, 
-            scoring=scoring
+            model, X_train, y_train, cv=cv_fold, scoring=scoring
         )
 
         # make prediction on k-fold cross validation
@@ -64,18 +57,14 @@ class SupervisedModels:
 
         # make probability prediction on k-fold cross validation
         y_pred_proba = cross_val_predict(
-            model, 
-            X_train, 
-            y_train, 
-            cv=cv_fold, 
-            method='predict_proba'
-        )[:,1]
+            model, X_train, y_train, cv=cv_fold, method='predict_proba'
+        )[:, 1]
 
         # print results
-        print('{}-Fold cross-validation results for {}'.format(
-            str(cv_fold), 
-            str(model_nm)
-        )
+        print(
+            '{}-Fold cross-validation results for {}'.format(
+                str(cv_fold), str(model_nm)
+            )
         )
         print('-' * 60)
         print('Accuracy (std): %f (%f)' % (score.mean(), score.std()))
@@ -83,10 +72,9 @@ class SupervisedModels:
         print('AUPRC: %f' % (average_precision_score(y_train, y_pred_proba)))
         print('Predicted classes:', np.unique(y_cv_pred))
         print('Confusion matrix:\n', confusion_matrix(y_train, y_cv_pred))
-        print('Classification report:\n', classification_report(
-            y_train, 
-            y_cv_pred
-        )
+        print(
+            'Classification report:\n',
+            classification_report(y_train, y_cv_pred),
         )
         print('-' * 60)
 
@@ -103,75 +91,68 @@ class SupervisedModels:
         ------
         matplolib figure of auc vs. hyperparameters
         """
-        C_list = [2**x for x in range(-2,9,2)]
-        gamma_list = [2**x for x in range(-11,-5,2)]
+        C_list = [2**x for x in range(-2, 9, 2)]
+        gamma_list = [2**x for x in range(-11, -5, 2)]
         auc_list = [
-            pd.Series(0.0, 
-            index=range(len(C_list))) 
+            pd.Series(0.0, index=range(len(C_list)))
             for _ in range(len(gamma_list))
         ]
         ap_list = [
-            pd.Series(0.0, 
-            index = range(len(C_list))) 
+            pd.Series(0.0, index=range(len(C_list)))
             for _ in range(len(gamma_list))
         ]
         axes_labels = ['2^-2', '2^0', '2^2', '2^4', '2^6', '2^8']
         gamma_labels = ['2^-11', '2^-9', '2^-7']
         plt.rcParams.update({'font.size': 15})
-        _, (ax1, ax2) = plt.subplots(1,2, figsize=(18,6))
+        _, (ax1, ax2) = plt.subplots(1, 2, figsize=(18, 6))
 
         for i, val1 in enumerate(gamma_list):
             for j, val2 in enumerate(C_list):
                 model = SVC(
-                    C=val2, 
-                    gamma=val1, 
-                    probability=True, 
-                    kernel='rbf', 
-                    random_state=42
+                    C=val2,
+                    gamma=val1,
+                    probability=True,
+                    kernel='rbf',
+                    random_state=42,
                 )
                 model.fit(X_train, y_train)
                 y_pred_proba = cross_val_predict(
-                    model, 
-                    X_train, 
-                    y_train, 
-                    cv=cv_fold, 
-                    method='predict_proba'
-                )[:,1]
+                    model, X_train, y_train, cv=cv_fold, method='predict_proba'
+                )[:, 1]
                 auc_list[i][j] = roc_auc_score(y_train, y_pred_proba)
                 ap_list[i][j] = average_precision_score(y_train, y_pred_proba)
             auc_list[i].plot(
-                label="gamma="+str(gamma_labels[i]),
-                marker="o", 
-                linestyle="-", ax=ax1
+                label='gamma=' + str(gamma_labels[i]),
+                marker='o',
+                linestyle='-',
+                ax=ax1,
             )
             ap_list[i].plot(
-                label="gamma="+str(gamma_labels[i]),
-                marker="o", 
-                linestyle="-", 
-                ax=ax2
+                label='gamma=' + str(gamma_labels[i]),
+                marker='o',
+                linestyle='-',
+                ax=ax2,
             )
 
-        ax1.set_xlabel("C", fontsize=15)
-        ax1.set_ylabel("AUC", fontsize=15)
-        ax1.set_title("{}-Fold Cross-Validation with RBF Kernel SVM".format(
-            cv_fold
-        ),
-            fontsize=15
+        ax1.set_xlabel('C', fontsize=15)
+        ax1.set_ylabel('AUC', fontsize=15)
+        ax1.set_title(
+            '{}-Fold Cross-Validation with RBF Kernel SVM'.format(cv_fold),
+            fontsize=15,
         )
         ax1.set_xticklabels(axes_labels)
         ax1.set_xticks(range(len(C_list)))
         ax1.legend(loc='best')
 
-        ax2.set_xlabel("C", fontsize=15)
-        ax2.set_ylabel("AP", fontsize=15)
-        ax2.set_title("{}-Fold Cross-Validation with RBF Kernel SVM".format(
-            cv_fold
-        ), 
-            fontsize=15
+        ax2.set_xlabel('C', fontsize=15)
+        ax2.set_ylabel('AP', fontsize=15)
+        ax2.set_title(
+            '{}-Fold Cross-Validation with RBF Kernel SVM'.format(cv_fold),
+            fontsize=15,
         )
         ax2.set_xticks(range(len(C_list)))
         ax2.set_xticklabels(axes_labels)
-        ax2.legend(loc = 'best')
+        ax2.legend(loc='best')
         plt.show()
 
     def plot_auc_ap_lr(self, X_train, y_train, cv_fold):
@@ -187,70 +168,64 @@ class SupervisedModels:
         -------
         matplolib figure of auc vs. hyperparameters
         """
-        C_list = [2**x for x in range(-2,9,2)]
-        class_wgt_list = [None, 'balanced', {0:1, 1:2}, {0:1, 1:3}]
+        C_list = [2**x for x in range(-2, 9, 2)]
+        class_wgt_list = [None, 'balanced', {0: 1, 1: 2}, {0: 1, 1: 3}]
         auc_list = [
-            pd.Series(0.0, 
-            index=range(len(C_list))) 
+            pd.Series(0.0, index=range(len(C_list)))
             for _ in range(len(class_wgt_list))
         ]
         ap_list = [
-            pd.Series(0.0, 
-            index = range(len(C_list))) 
+            pd.Series(0.0, index=range(len(C_list)))
             for _ in range(len(class_wgt_list))
         ]
 
         axes_labels = ['2^-2', '2^0', '2^2', '2^4', '2^6', '2^8']
         plt.rcParams.update({'font.size': 15})
-        _, (ax1, ax2) = plt.subplots(1,2, figsize=(18,6))
+        _, (ax1, ax2) = plt.subplots(1, 2, figsize=(18, 6))
 
         for i, val1 in enumerate(class_wgt_list):
             for j, val2 in enumerate(C_list):
                 model = LogisticRegression(
-                    C = val2, 
-                    class_weight=val1, 
-                    random_state=42
+                    C=val2, class_weight=val1, random_state=42
                 )
                 model.fit(X_train, y_train)
                 y_pred_proba = cross_val_predict(
-                    model, 
-                    X_train, 
-                    y_train, 
-                    cv=cv_fold, 
-                    method='predict_proba'
-                )[:,1]
+                    model, X_train, y_train, cv=cv_fold, method='predict_proba'
+                )[:, 1]
                 auc_list[i][j] = roc_auc_score(y_train, y_pred_proba)
                 ap_list[i][j] = average_precision_score(y_train, y_pred_proba)
             auc_list[i].plot(
-                label="class_weight="+str(class_wgt_list[i]), 
-                marker="o", 
-                linestyle="-", 
-                ax=ax1
+                label='class_weight=' + str(class_wgt_list[i]),
+                marker='o',
+                linestyle='-',
+                ax=ax1,
             )
             ap_list[i].plot(
-                label="class_weight="+str(class_wgt_list[i]), 
-                marker="o", 
-                linestyle="-", 
-                ax=ax2
+                label='class_weight=' + str(class_wgt_list[i]),
+                marker='o',
+                linestyle='-',
+                ax=ax2,
             )
 
-        ax1.set_xlabel("C", fontsize=15)
-        ax1.set_ylabel("AUC", fontsize=15)
-        ax1.set_title("{}-Fold Cross-Validation with Logistic Regression".format(
-            cv_fold
-        ), 
-            fontsize = 15
+        ax1.set_xlabel('C', fontsize=15)
+        ax1.set_ylabel('AUC', fontsize=15)
+        ax1.set_title(
+            '{}-Fold Cross-Validation with Logistic Regression'.format(
+                cv_fold
+            ),
+            fontsize=15,
         )
         ax1.set_xticklabels(axes_labels)
         ax1.set_xticks(range(len(C_list)))
         ax1.legend(loc='best')
 
-        ax2.set_xlabel("C", fontsize=15)
-        ax2.set_ylabel("AP", fontsize=15)
-        ax2.set_title("{}-Fold Cross-Validation with Logistic Regression".format(
-            cv_fold
-        ), 
-            fontsize=15
+        ax2.set_xlabel('C', fontsize=15)
+        ax2.set_ylabel('AP', fontsize=15)
+        ax2.set_title(
+            '{}-Fold Cross-Validation with Logistic Regression'.format(
+                cv_fold
+            ),
+            fontsize=15,
         )
         ax2.set_xticks(range(len(C_list)))
         ax2.set_xticklabels(axes_labels)
@@ -286,19 +261,21 @@ class SupervisedModels:
         print('AUPRC: %f' % (average_precision_score(y_test, y_pred_proba)))
         print('Predicted classes:', np.unique(y_pred))
         print('Confusion matrix:\n', confusion_matrix(y_test, y_pred))
-        print('Classification report:\n', classification_report(y_test, y_pred))
+        print(
+            'Classification report:\n', classification_report(y_test, y_pred)
+        )
         print('-' * 60)
 
     def plot_roc_pr_curves(
-        self, 
-        model, 
-        X_train, 
-        y_train, 
-        X_test, 
-        y_test, 
-        cv_fold, 
-        color=None, 
-        label=None
+        self,
+        model,
+        X_train,
+        y_train,
+        X_test,
+        y_test,
+        cv_fold,
+        color=None,
+        label=None,
     ):
         """Plot ROC and PR curves for cross-validation and test sets.
 
@@ -325,11 +302,7 @@ class SupervisedModels:
 
         # make prediction on k-fold cross validation
         y_cv_pred_proba = cross_val_predict(
-            model, 
-            X_train, 
-            y_train, 
-            cv=cv_fold, 
-            method="predict_proba"
+            model, X_train, y_train, cv=cv_fold, method='predict_proba'
         )
 
         # compute the fpr and tpr for each classifier
@@ -337,8 +310,7 @@ class SupervisedModels:
 
         # compute the precisions and recalls for the classifier
         precisions_cv, recalls_cv, _ = precision_recall_curve(
-            y_train, 
-            y_cv_pred_proba[:, 1]
+            y_train, y_cv_pred_proba[:, 1]
         )
 
         # compute the area under the ROC curve for each classifier
@@ -361,15 +333,15 @@ class SupervisedModels:
         # PR curve
         plt.subplot(223)
         plt.plot(
-            recalls_cv, 
-            precisions_cv, 
-            color=color, 
-            label=(label) % area_prc_cv
+            recalls_cv, precisions_cv, color=color, label=(label) % area_prc_cv
         )
         plt.xlabel('Recall')
         plt.ylabel('Precision')
         plt.title(
-            'PR Curve for {}-Fold Cross-Validation Training Set'.format(cv_fold))
+            'PR Curve for {}-Fold Cross-Validation Training Set'.format(
+                cv_fold
+            )
+        )
         plt.legend(loc='best')
 
         # ROC and PR curves for Test set
@@ -392,7 +364,7 @@ class SupervisedModels:
         # plt.rcParams.update({'font.size': 12})
         plt.subplot(222)
         plt.plot(fpr, tpr, color=color, label=(label) % area_auc)
-        plt.plot([0, 1], [0, 1], 'k--', linewidth = 0.5)
+        plt.plot([0, 1], [0, 1], 'k--', linewidth=0.5)
         plt.axis([0, 1, 0, 1])
         plt.xlabel('False positive rate (FPR)')
         plt.ylabel('True positive rate (TPR)')
@@ -408,16 +380,16 @@ class SupervisedModels:
         plt.legend(loc='best')
 
     def plot_aucroc_aucpr(
-        self, 
-        model, 
-        X_train, 
-        y_train, 
-        X_test, 
-        y_test, 
-        cv_fold,  
-        marker=None, 
-        color=None, 
-        label=None
+        self,
+        model,
+        X_train,
+        y_train,
+        X_test,
+        y_test,
+        cv_fold,
+        marker=None,
+        color=None,
+        label=None,
     ):
         """Plot AUC-ROC  and AUC-PR curves for cross-validation vs. test sets.
 
@@ -446,8 +418,7 @@ class SupervisedModels:
 
         # compute the precisions and recalls of the test set
         test_precisions, test_recalls, _ = precision_recall_curve(
-            y_test, 
-            y_pred_proba
+            y_test, y_pred_proba
         )
 
         # compute the area under the ROC curve of the test set
@@ -460,17 +431,12 @@ class SupervisedModels:
 
         # make prediction on the k-fold cross-validation set
         y_cv_pred_proba = cross_val_predict(
-            model, 
-            X_train, 
-            y_train, 
-            cv=cv_fold, 
-            method="predict_proba"
+            model, X_train, y_train, cv=cv_fold, method='predict_proba'
         )
 
         # compute the precisions and recalls of the cross-validation set
         cv_precisions, cv_recalls, _ = precision_recall_curve(
-            y_train, 
-            y_cv_pred_proba[:, 1]
+            y_train, y_cv_pred_proba[:, 1]
         )
 
         # compute the area under the ROC curve of the cross-validation set
@@ -479,20 +445,20 @@ class SupervisedModels:
         # compute the area under the PR curve of the cross-validation set
         area_prc_cv = auc(cv_recalls, cv_precisions)
 
-        # plot 
-        # AUC-ROC 
+        # plot
+        # AUC-ROC
         plt.subplot(121)
         plt.plot(
-            [area_auc_cv], 
-            [area_auc_test], 
-            color=color, 
-            marker=marker, 
-            label=label
+            [area_auc_cv],
+            [area_auc_test],
+            color=color,
+            marker=marker,
+            label=label,
         )
-        plt.plot([0.979, 1.001], [0.979, 1.001], 'k--', linewidth = 0.5)
-        plt.axis([0.979,1.001,0.979,1.001])
-        plt.xticks(np.arange(0.98,1,0.01))
-        plt.yticks(np.arange(0.98,1,0.01))
+        plt.plot([0.979, 1.001], [0.979, 1.001], 'k--', linewidth=0.5)
+        plt.axis([0.979, 1.001, 0.979, 1.001])
+        plt.xticks(np.arange(0.98, 1, 0.01))
+        plt.yticks(np.arange(0.98, 1, 0.01))
         plt.xlabel('Cross-validation set results')
         plt.ylabel('Test set results')
         plt.title('AUC-ROC for Cross-Validation vs. Test Sets')
@@ -501,16 +467,16 @@ class SupervisedModels:
         # AUC-PR
         plt.subplot(122)
         plt.plot(
-            [area_prc_cv], 
-            [area_prc_test], 
-            color=color, 
-            marker=marker, 
-            label=label
+            [area_prc_cv],
+            [area_prc_test],
+            color=color,
+            marker=marker,
+            label=label,
         )
         plt.plot([0, 1], [0, 1], 'k--', linewidth=0.5)
-        plt.axis([0.87,1.001,0.87,1.001])
-        plt.xticks(np.arange(0.88,1.01,0.02))
-        plt.yticks(np.arange(0.88,1.02,0.02))
+        plt.axis([0.87, 1.001, 0.87, 1.001])
+        plt.xticks(np.arange(0.88, 1.01, 0.02))
+        plt.yticks(np.arange(0.88, 1.02, 0.02))
         plt.xlabel('Cross-validation set results')
         plt.ylabel('Test set results')
         plt.title('AUC-PR for Cross-Validation vs. Test Sets')

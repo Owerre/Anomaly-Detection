@@ -5,7 +5,8 @@
 ##################################
 
 import warnings
-warnings.filterwarnings("ignore")
+
+warnings.filterwarnings('ignore')
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,12 +16,13 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.pipeline import Pipeline
 from sklearn.decomposition import PCA
 
+
 class TransformationPipeline:
     """Transformation pipeline for semi-supervised learning."""
 
     def __init__(self):
         """Define parameters."""
-        
+
     def num_pipeline(self, X_train):
         """Transformation pipeline of data with only numerical variables.
 
@@ -32,7 +34,7 @@ class TransformationPipeline:
         -------
         Transformation pipeline and transformed data in numpy array
         """
-         # original numerical feature names 
+        # original numerical feature names
         feat_names = list(X_train.select_dtypes('number'))
 
         # create pipeline
@@ -44,7 +46,7 @@ class TransformationPipeline:
         # apply transformer
         X_train_scaled = num_pipeline.fit_transform(X_train)
         return X_train_scaled, feat_names
-    
+
     def cat_encoder(self, X_train):
         """Encoder for categorical variables.
 
@@ -61,17 +63,17 @@ class TransformationPipeline:
 
         # Fit transform the training set
         X_train_scaled = one_hot_encoder.fit_transform(X_train)
-        
+
         # Feature names for output features
-        feat_names = list(one_hot_encoder.get_feature_names_out(
-            list(X_train.select_dtypes('O')
-            )
+        feat_names = list(
+            one_hot_encoder.get_feature_names_out(
+                list(X_train.select_dtypes('O'))
             )
         )
         return X_train_scaled.toarray(), feat_names
 
     def preprocessing(self, X_train):
-        """Transformation pipeline of data with both numerical 
+        """Transformation pipeline of data with both numerical
         and categorical variables.
 
         Parameters
@@ -90,12 +92,12 @@ class TransformationPipeline:
         cat_train, cat_col = self.cat_encoder(X_train.select_dtypes('O'))
 
         # transformed training set
-        X_train_scaled = np.concatenate((num_train,cat_train), axis = 1)
+        X_train_scaled = np.concatenate((num_train, cat_train), axis=1)
 
         # feature names
         feat_names = num_col + cat_col
         return X_train_scaled, feat_names
-    
+
     def pca_plot_labeled(self, X, labels, palette=None, ax=None):
         """Dimensionality reduction of labeled data using PCA.
 
@@ -120,20 +122,20 @@ class TransformationPipeline:
 
         # plot results
         sns.scatterplot(
-            x='PC1', 
-            y='PC2', 
+            x='PC1',
+            y='PC2',
             data=X_reduced_pca,
-            hue='class', 
+            hue='class',
             style='class',
-            palette=palette, 
-            ax=ax
+            palette=palette,
+            ax=ax,
         )
 
         # axis labels
-        ax.set_xlabel("Principal component 1")
-        ax.set_ylabel("Principal component 2")
+        ax.set_xlabel('Principal component 1')
+        ax.set_ylabel('Principal component 2')
         ax.legend(loc='best')
-    
+
     def plot_pca(self, X_train, y_train, y_pred):
         """Plot PCA before and after semi-supervised classification.
 
@@ -146,22 +148,14 @@ class TransformationPipeline:
         Returns
         -------
         Matplotlib figure
-        """    
+        """
         # Plot figure
         plt.rcParams.update({'font.size': 15})
-        _, (ax1,ax2) = plt.subplots(1,2, figsize=(20,6))
+        _, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 6))
 
         self.pca_plot_labeled(
-            X_train, 
-            y_train, 
-            palette=['gray', 'lime', 'r'], 
-            ax=ax1
+            X_train, y_train, palette=['gray', 'lime', 'r'], ax=ax1
         )
-        self.pca_plot_labeled(
-            X_train, 
-            y_pred, 
-            palette=['lime', 'r'], 
-            ax=ax2
-        )
-        ax1.set_title("PCA before semi-supervised classification")
-        ax2.set_title("PCA after semi-supervised classification")
+        self.pca_plot_labeled(X_train, y_pred, palette=['lime', 'r'], ax=ax2)
+        ax1.set_title('PCA before semi-supervised classification')
+        ax2.set_title('PCA after semi-supervised classification')

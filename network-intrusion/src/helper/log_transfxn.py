@@ -5,9 +5,11 @@
 ############################
 
 import warnings
-warnings.filterwarnings("ignore")
+
+warnings.filterwarnings('ignore')
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
+
 
 class LogTransformer(BaseEstimator, TransformerMixin):
     """Performs log(1+x) transformation on numerical features."""
