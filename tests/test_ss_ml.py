@@ -43,7 +43,7 @@ def test_semi_supervised(input_df):
         base_classifier, 
         X_train_scaled, 
         y_train,
-        threshold= 0.75, 
+        threshold=0.75, 
         max_iter=None,
         verbose=True
     )
