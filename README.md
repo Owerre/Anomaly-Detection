@@ -45,7 +45,7 @@ We use the ground truth (true labels) of the unlabeled dataset to validate the p
 
 ## Supervised Learning
 
-In the supervised setting, the class label for each record in the training set are provided and the goal is to train a classifier that would be used for prediction on unseen data. Here, we have trained two classifiers
+In the supervised setting, the class label for each record in the training set is provided and the goal is to train a classifier that would be used for prediction on unseen data. Here, we have trained two classifiers
 
 - Logistic Regression
 
