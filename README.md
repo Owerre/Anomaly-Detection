@@ -49,7 +49,7 @@ In the supervised setting, the class label for each record in the training set i
 
 - Logistic Regression
 
-- Random Forest 
+- Random Forest.
 
 The results below show that the two classifiers perform extremely well on the dataset. The AUC-ROC and AUC-PRC are 100\% for on the training (cross-validation) and test sets.
 
