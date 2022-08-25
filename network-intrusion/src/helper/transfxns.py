@@ -148,49 +148,49 @@ class TransformationPipeline:
         plt.show()
 
 
-def pca_plot(self, X, label=None, palette=None):
-    """Dimensionality reduction using PCA for unlabeled data.
+    def pca_plot(self, X, label=None, palette=None):
+        """Dimensionality reduction using PCA for unlabeled data.
 
-    Parameters
-    ----------
-    X: scaled data
-    label: class label
-    palette: color list
+        Parameters
+        ----------
+        X: scaled data
+        label: class label
+        palette: color list
 
-    Returns
-    -------
-    Matplotlib plot of two component PCA
-    """
-    # PCA
-    pca = PCA(n_components=2)
-    X_pca = pca.fit_transform(X)
+        Returns
+        -------
+        Matplotlib plot of two component PCA
+        """
+        # PCA
+        pca = PCA(n_components=2)
+        X_pca = pca.fit_transform(X)
 
-    # put in dataframe
-    X_reduced_pca = pd.DataFrame(data=X_pca)
-    X_reduced_pca.columns = ['PC1', 'PC2']
-    X_reduced_pca['class'] = label
+        # put in dataframe
+        X_reduced_pca = pd.DataFrame(data=X_pca)
+        X_reduced_pca.columns = ['PC1', 'PC2']
+        X_reduced_pca['class'] = label
 
-    # plot figure
-    plt.rcParams.update({'font.size': 15})
-    _, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 6))
+        # plot figure
+        plt.rcParams.update({'font.size': 15})
+        _, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 6))
 
-    sns.scatterplot(
-        x='PC1', y='PC2', data=X_reduced_pca, palette=palette, ax=ax1
-    )
-    sns.scatterplot(
-        x='PC1',
-        y='PC2',
-        data=X_reduced_pca,
-        hue='class',
-        palette=palette,
-        ax=ax2,
-    )
+        sns.scatterplot(
+            x='PC1', y='PC2', data=X_reduced_pca, palette=palette, ax=ax1
+        )
+        sns.scatterplot(
+            x='PC1',
+            y='PC2',
+            data=X_reduced_pca,
+            hue='class',
+            palette=palette,
+            ax=ax2,
+        )
 
-    # axes labels
-    ax1.set_xlabel('Principal component 1')
-    ax1.set_ylabel('Principal component 2')
-    ax2.set_xlabel('Principal component 1')
-    ax2.set_ylabel('Principal component 2')
-    ax1.set_title('PCA before unsupervised anomaly detection')
-    ax2.set_title('PCA after unsupervised anomaly detection')
-    ax2.legend(loc='best')
+        # axes labels
+        ax1.set_xlabel('Principal component 1')
+        ax1.set_ylabel('Principal component 2')
+        ax2.set_xlabel('Principal component 1')
+        ax2.set_ylabel('Principal component 2')
+        ax1.set_title('PCA before unsupervised anomaly detection')
+        ax2.set_title('PCA after unsupervised anomaly detection')
+        ax2.legend(loc='best')
