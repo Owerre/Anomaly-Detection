@@ -15,7 +15,7 @@ class LogTransformer(BaseEstimator, TransformerMixin):
     """Performs log(1+x) transformation on numerical features."""
 
     def __init__(self):
-        """Define parameters."""
+        """Pparameter initialization."""
 
     def fit(self, X, y=None):
         """Do nothing."""

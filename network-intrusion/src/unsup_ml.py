@@ -161,7 +161,7 @@ class UnsupervisedModels:
         -------
         Performance metrics
         """
-        print('Test predictions for {}'.format(str(model_nm)))
+        print(f'Test predictions for {str(model_nm)}')
         print('-' * 60)
         print('Accuracy:  %f' % (accuracy_score(y_true, y_pred)))
         print('AUROC: %f' % (roc_auc_score(y_true, y_pred)))
