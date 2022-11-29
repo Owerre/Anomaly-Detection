@@ -24,45 +24,82 @@ class SupervisedModels:
 
     def __init__(self):
         """Parameter initialization."""
+        pass
 
-    def eval_metrics_cv(
+    def prediction(self, model, X, y_true, subset=None, model_nm=None):
+        """Predictions on the dataset.
+
+        Parameters
+        ----------
+        model: trained supervised model
+        X (array): feature matrix
+        y_true (1d array): ground truth labels
+        model_nm (str): name of classifier
+        subset (str): subset of data
+
+        Returns
+        -------
+        Performance metrics
+        """
+        # Make prediction
+        y_pred = model.predict(X)
+
+        # Compute the accuracy of the model
+        accuracy = accuracy_score(y_true, y_pred)
+
+        # Predict probability
+        y_pred_proba = model.predict_proba(X)[:, 1]
+
+        print(f'Predictions on the {subset} for {model_nm}')
+        print('-' * 60)
+        print('Accuracy:  %f' % (accuracy))
+        print('AUROC: %f' % (roc_auc_score(y_true, y_pred_proba)))
+        print('AUPRC: %f' % (average_precision_score(y_true, y_pred_proba)))
+        print('Predicted classes:', np.unique(y_pred))
+        print('Confusion matrix:\n', confusion_matrix(y_true, y_pred))
+        print(
+            'Classification report:\n', classification_report(y_true, y_pred)
+        )
+        print('-' * 60)
+
+    def prediction_cv(
         self, model, X_train, y_train, cv_fold, scoring=None, model_nm=None
     ):
-        """Cross-validation on the training set.
+        """Cross-validation prediction on the training set.
 
         Parameters
         ----------
         model: supervised classification model
-        X_train: feature matrix of the training set
-        y_train: class labels
-        cv_fold: number of cross-validation fold
-        scoring: performance metric
-        model_nm: name of classifier
+        X_train (array): feature matrix of the training set
+        y_train (1d array): class labels
+        cv_fold (int): number of cross-validation fold
+        scoring (str): performance metric
+        model_nm (str): name of classifier
 
         Returns
         -------
         Performance metrics on the cross-validation training set
         """
 
-        # fit the training set
+        # Fit the training set
         model.fit(X_train, y_train)
 
-        # compute accuracy on k-fold cross validation
+        # Compute accuracy on k-fold cross validation
         score = cross_val_score(
             model, X_train, y_train, cv=cv_fold, scoring=scoring
         )
 
-        # make prediction on k-fold cross validation
+        # Make prediction on k-fold cross validation
         y_cv_pred = cross_val_predict(model, X_train, y_train, cv=cv_fold)
 
-        # make probability prediction on k-fold cross validation
+        # Make probability prediction on k-fold cross validation
         y_pred_proba = cross_val_predict(
             model, X_train, y_train, cv=cv_fold, method='predict_proba'
         )[:, 1]
 
-        # print results
+        # Print results
         print(
-            f'{str(cv_fold)}-Fold cross-validation results for {str(model_nm)}', 
+            f'{str(cv_fold)}-fold cross-validation for {str(model_nm)}',
             )
         print('-' * 60)
         print('Accuracy (std): %f (%f)' % (score.mean(), score.std()))
@@ -153,21 +190,21 @@ class SupervisedModels:
         ax2.legend(loc='best')
         plt.show()
 
-    def plot_auc_ap_lr(self, X_train, y_train, cv_fold):
+    def plot_auc_ap_lr(self, X_train, y_train, cv_fold=None):
         """Plot of cross-validation AUC and AP for Logistic regression.
 
         Parameters
         ----------
-        X_train: feature matrix of the training set
-        y_train: class labels
-        cv_fold: number of cross-validation fold
+        X_train (array): feature matrix of the training set
+        y_train (1d array): class labels
+        cv_fold (int): number of cross-validation fold
 
         Returns
         -------
         matplolib figure of auc vs. hyperparameters
         """
         C_list = [2**x for x in range(-2, 9, 2)]
-        class_wgt_list = [None, 'balanced', {0: 1, 1: 2}, {0: 1, 1: 3}]
+        class_wgt_list = [None, 'balanced', {0: 1, 1: 3}, {0: 1, 1: 61}]
         auc_list = [
             pd.Series(0.0, index=range(len(C_list)))
             for _ in range(len(class_wgt_list))
@@ -226,40 +263,6 @@ class SupervisedModels:
         ax2.legend(loc='best')
         plt.show()
 
-    def test_pred(self, model, X_test, y_test, model_nm=None):
-        """Predictions on the test set.
-
-        Parameters
-        ---------
-        model: trained supervised model
-        X_test: feature matrix of the test set
-        y_test: test set class labels
-        model_nm: name of classifier
-
-        Returns
-        -------
-        Performance metrics on the test set
-        """
-        # make prediction on the test set
-        y_pred = model.predict(X_test)
-
-        # compute the accuracy of the model
-        accuracy = accuracy_score(y_test, y_pred)
-
-        # predict probability
-        y_pred_proba = model.predict_proba(X_test)[:, 1]
-        print(f'Test predictions for {str(model_nm)}')
-        print('-' * 60)
-        print('Accuracy:  %f' % (accuracy))
-        print('AUROC: %f' % (roc_auc_score(y_test, y_pred_proba)))
-        print('AUPRC: %f' % (average_precision_score(y_test, y_pred_proba)))
-        print('Predicted classes:', np.unique(y_pred))
-        print('Confusion matrix:\n', confusion_matrix(y_test, y_pred))
-        print(
-            'Classification report:\n', classification_report(y_test, y_pred)
-        )
-        print('-' * 60)
-
     def plot_roc_pr_curves(
         self,
         model,
@@ -275,22 +278,19 @@ class SupervisedModels:
 
         Parameters
         ----------
-        model: supervised classification model
-        X_train: feature matrix of the training set
-        y_train: training set class labels
-        X_test: feature matrix of the test set
-        y_test: test set class labels
-        cv_fold: number of k-fold cross-validation
-        color: matplotlib color
-        label: matplotlib label
+        model: trained supervised classification model
+        X_train (array): feature matrix of the training set
+        y_train (1d array): training set class labels
+        X_test (array): feature matrix of the test set
+        y_test (1d array): test set class labels
+        cv_fold (int): number of k-fold cross-validation
+        color (str): matplotlib color
+        label (str): matplotlib label
 
         Returns
         -------
         Matplotlib line plot
         """
-
-        # model fit
-        model.fit(X_train, y_train)
 
         # ROC and PR curves for cross-validation set
 
@@ -321,7 +321,7 @@ class SupervisedModels:
         plt.axis([0, 1, 0, 1])
         plt.xlabel('False positive rate (FPR)')
         plt.ylabel('True positive rate (TPR)')
-        plt.title('ROC Curve for the Cross-Validation Training Set')
+        plt.title(f'ROC Curve for the {cv_fold}-Cross-Validation Training Set')
         plt.legend(loc='best')
 
         # PR curve
@@ -387,21 +387,19 @@ class SupervisedModels:
 
         Parameters
         ----------
-        model: supervised classification model
-        X_train: feature matrix of the training set
-        y_train: training set class labels
-        X_test: feature matrix of the test set
-        y_test: test set class labels
-        cv_fold: number of k-fold cross-validation
-        color: matplotlib color
-        marker: matplotlib marker
+        model: trained supervised classification model
+        X_train (array): feature matrix of the training set
+        y_train (1d array): training set class labels
+        X_test (array): feature matrix of the test set
+        y_test (1d array): test set class labels
+        cv_fold (int): number of k-fold cross-validation
+        color (str): matplotlib color
+        marker (str): matplotlib marker
 
         Returns
         -------
         Matplotlib line plot
         """
-        # Fit the model
-        model.fit(X_train, y_train)
 
         # AUC-ROC  and AUC-PR for Test set
 

@@ -22,6 +22,7 @@ class TransformationPipeline:
 
     def __init__(self):
         """Define parameters."""
+        pass
 
     def num_pipeline(self, X_train):
         """Transformation pipeline of data with only numerical variables.

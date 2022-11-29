@@ -25,6 +25,7 @@ class UnsupervisedModels:
 
     def __init__(self):
         """Parameter initialization."""
+        pass
 
     def iforest(self, X_train, n_estimators=None, random_state=None):
         """Train Isolation Forest from scikit-learn.

@@ -22,6 +22,7 @@ class SemiSupervised:
 
     def __init__(self):
         """Parameter initialization."""
+        pass
 
     def self_training_clf(
         self,

@@ -13,9 +13,12 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import OneHotEncoder
-from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import PowerTransformer
 from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
 from sklearn.decomposition import PCA
+from sklearn.pipeline import Pipeline
+from sklearn.compose import  ColumnTransformer
 
 
 class TransformationPipeline:
@@ -23,6 +26,7 @@ class TransformationPipeline:
 
     def __init__(self):
         """Define parameters."""
+        pass
 
     def num_pipeline(self, X_train, X_test):
         """Transformation pipeline of data with only numerical variables.
@@ -109,6 +113,40 @@ class TransformationPipeline:
         # feature names
         feat_nm = num_col + cat_col
         return X_train_scaled, X_test_scaled, feat_nm
+
+    def preprocessing_2(self, X_train, X_test):
+        """This preprocessing uses scikit-learn ColumnTransformer class."""
+        # Create pipelines
+        num_pipeline = Pipeline(
+            [
+                ('imputer', SimpleImputer(strategy='median')),
+                ('p_transf', PowerTransformer(standardize=False)),
+                ('std_scaler', StandardScaler()),
+            ]
+        )
+
+        cat_pipeline = Pipeline(
+            [
+                ('imputer', SimpleImputer(strategy='most_frequent')),
+                ('one_hot_encoder', OneHotEncoder(handle_unknown='ignore')),
+            ]
+        )
+
+        cat_attribs = list(X_train.select_dtypes('O'))
+        num_attribs = list(X_train.select_dtypes('number'))
+        combo_pipeline = ColumnTransformer(
+            [
+                ('num', num_pipeline, num_attribs),
+                ('cat', cat_pipeline, cat_attribs),
+        
+            ]
+        )
+
+        # fit transform the training set and transform the test set
+        X_train_scaled = combo_pipeline.fit_transform(X_train)
+        X_test_scaled = combo_pipeline.transform(X_test)
+        feat_nms = list(combo_pipeline.get_feature_names_out())
+        return X_train_scaled, X_test_scaled, feat_nms
 
     def pca_plot_labeled(self, X, labels, palette=None):
         """Dimensionality reduction of labeled data using PCA.
